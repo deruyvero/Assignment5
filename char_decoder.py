@@ -72,10 +72,8 @@ class CharDecoder(nn.Module):
         loss = nn.CrossEntropyLoss(ignore_index = self.target_vocab.char2id['<pad>'], reduction = 'sum')
         output,hn = self.forward(char_sequence,dec_hidden)
         (length, batch, classes) = output.shape
-        output = output.permute(1, 2, 0)
-
-
-        target = char_sequence.permute(1,0)
+        output = output.reshape(-1,classes)
+        target = char_sequence.reshape(-1)
         #target = torch.empty(batch, dtype=torch.long).random_(classes)
         cross_entropy_losses = loss(output,target)
         #cross_entropy_losses.backward()
