@@ -71,11 +71,12 @@ class CharDecoder(nn.Module):
         ###       - char_sequence corresponds to the sequence x_1 ... x_{n+1} from the handout (e.g., <START>,m,u,s,i,c,<END>).
         loss = nn.CrossEntropyLoss(ignore_index = self.target_vocab.char2id['<pad>'], reduction = 'sum')
         output,hn = self.forward(char_sequence,dec_hidden)
-
         (length, batch, classes) = output.shape
-        output = output.permute(0, 2, 1)
-        target = char_sequence
-        #target = torch.empty(length, batch, dtype=torch.long).random_(classes)
+        output = output.permute(1, 2, 0)
+
+
+        target = char_sequence.permute(1,0)
+        #target = torch.empty(batch, dtype=torch.long).random_(classes)
         cross_entropy_losses = loss(output,target)
         #cross_entropy_losses.backward()
         #cross_entropy_losses.backward(retain_graph=True,create_graph = True)
