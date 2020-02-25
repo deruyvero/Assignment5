@@ -24,7 +24,7 @@ class Highway(nn.Module):
         x_proj = self.relu(y)
         y_2 = self.linear_layer_2(input_batch)
         x_gate = self.sigmoid(y_2)
-        new_x_gate = torch.add(torch.ones(x_gate.size()),-x_gate)
+        new_x_gate = 1 -x_gate
         x_first = torch.mul(x_gate ,x_proj)
         x_second = torch.mul(new_x_gate,input_batch)
         x_highway = torch.add(x_first,x_second)
