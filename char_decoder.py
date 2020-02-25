@@ -117,7 +117,7 @@ class CharDecoder(nn.Module):
         for i in range(0,batch):
             word = ""
             x = 0
-            while x <= max_length:
+            while x <= max_length + 1:
                 if output_words[x][i] != self.target_vocab.end_of_word:
                     word = word + self.target_vocab.id2char[output_words[x][i]]
                 x += 1
