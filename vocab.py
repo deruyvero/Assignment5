@@ -20,6 +20,7 @@ import json
 import torch
 from typing import List
 from utils import read_corpus, pad_sents, pad_sents_char
+from pdb import set_trace as bp
 
 class VocabEntry(object):
     """ Vocabulary Entry, i.e. structure containing either
@@ -121,7 +122,9 @@ class VocabEntry(object):
         ###     defined above.
         ###
         ###     You must prepend each word with the `start_of_word` character and append 
-        ###     with the `end_of_word` character. 
+        ###     with the `end_of_word` character.
+
+        return [[[self.start_of_word] + [self.char2id[c] for c in w ] + [self.end_of_word] for w in s] for s in sents]
 
 
         ### END YOUR CODE
@@ -153,7 +156,11 @@ class VocabEntry(object):
         ### TODO: 
         ###     Connect `words2charindices()` and `pad_sents_char()` which you've defined in 
         ###     previous parts
-        
+        char_ids = self.words2charindices(sents)
+        sents_t = pad_sents_char(char_ids,self.char2id['<pad>'] )
+        sents_var = torch.tensor(sents_t, dtype=torch.long, device=device)
+        sents_var = sents_var.permute(1,0,2)
+        return sents_var
 
         ### END YOUR CODE
 

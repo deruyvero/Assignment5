@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import torch.nn as nn
+import torch
+from pdb import set_trace as bp
 
 
 # Do not change these imports; your module names should be
@@ -9,8 +11,8 @@ import torch.nn as nn
 #   `Highway` in the file `highway.py`
 # Uncomment the following two imports once you're ready to run part 1(f)
 
-# from cnn import CNN
-# from highway import Highway
+from cnn import CNN
+from highway import Highway
 
 # End "do not change" 
 
@@ -29,10 +31,17 @@ class ModelEmbeddings(nn.Module):
 
         ## A4 code
         # pad_token_idx = vocab.src['<pad>']
-        # self.embeddings = nn.Embedding(len(vocab.src), embed_size, padding_idx=pad_token_idx)
+        # self.embeddings = nn.Embedding(len(vocab.src), , padding_idx=pad_token_idx)
         ## End A4 code
 
         ### YOUR CODE HERE for part 1f
+        self.embed_size = embed_size
+        self.vocab = vocab
+        pad_token_idx = vocab.char2id['<pad>']
+        self.embeddings = nn.Embedding(len(self.vocab.id2char) , 50, padding_idx=pad_token_idx)
+        self.cnn = CNN(50, 5, self.embed_size)
+        self.highway = Highway(self.embed_size)
+        self.dropout = nn.Dropout(p=0.3)
 
         ### END YOUR CODE
 
@@ -51,5 +60,18 @@ class ModelEmbeddings(nn.Module):
         ## End A4 code
 
         ### YOUR CODE HERE for part 1f
+
+        (sentence_length, batch_size, max_word_length) = input.shape
+        x_word_emb = self.embeddings(input)
+        x_word_emb = x_word_emb.view(sentence_length*batch_size,max_word_length,-1)
+        x_word_emb = x_word_emb.permute(0, 2, 1)
+
+        x_conv_out = self.cnn(x_word_emb)
+        x_highway = self.highway(x_conv_out)
+        x_highway = self.dropout(x_highway)
+
+        x_word_emb = x_highway.reshape(sentence_length,batch_size,-1)
+        return x_word_emb
+
 
         ### END YOUR CODE
