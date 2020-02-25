@@ -78,15 +78,7 @@ class CharDecoder(nn.Module):
         output = output.reshape(-1,classes)
         target = target_sequence.reshape(-1)
         cross_entropy_losses = self.loss(output,target)
-        cross_entropy_losses.backward()
         return cross_entropy_losses
-
-
-
-
-
-
-
         ### END YOUR CODE
 
     def decode_greedy(self, initialStates, device, max_length=21):
