@@ -158,9 +158,9 @@ class VocabEntry(object):
         ###     previous parts
         char_ids = self.words2charindices(sents)
         sents_t = pad_sents_char(char_ids,self.char2id['<pad>'] )
-        sents_var = torch.tensor(sents_t, device=device)
+        sents_var = torch.tensor(sents_t, dtype=torch.long, device=device)
         sents_var = sents_var.permute(1,0,2)
-        return torch.t(sents_var)
+        return sents_var
 
         ### END YOUR CODE
 
