@@ -75,8 +75,8 @@ class CharDecoder(nn.Module):
         (length, batch, classes) = output.shape
 
         target_sequence = char_sequence[1:]
-        output = output.view(-1,classes)
-        target = target_sequence.view(-1)
+        output = output.reshape(-1,classes)
+        target = target_sequence.reshape(-1)
         #target = torch.empty(batch, dtype=torch.long).random_(classes)
         cross_entropy_losses = loss(output,target)
         #cross_entropy_losses.backward()
