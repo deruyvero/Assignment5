@@ -51,10 +51,12 @@ def pad_sents_char(sents, char_pad_token):
     for i,s in enumerate(sents_padded):
         if len(s) < max_len:
             sents_padded[i] = s + [[char_pad_token]*max_word_length]*(max_len - len(s) )
+        elif len(s) > max_len:
+            sents_padded[i] = s[0:max_len]
 
 
 
-    ### END YOUR CODE
+            ### END YOUR CODE
 
     return sents_padded
 
