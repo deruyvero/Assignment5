@@ -73,8 +73,8 @@ class CharDecoder(nn.Module):
         input_sequence = char_sequence[0:-1]
         output,hn = self.forward(input_sequence,dec_hidden)
         (length, batch, classes) = output.shape
-
-        target_sequence = char_sequence[1:]
+        output = output[0:-1]
+        target_sequence = char_sequence[1:-1]
         output = output.reshape(-1,classes)
         target = target_sequence.reshape(-1)
         #target = torch.empty(batch, dtype=torch.long).random_(classes)
