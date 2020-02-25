@@ -102,7 +102,7 @@ class CharDecoder(nn.Module):
         (one, batch, hidden_size) = initialStates[0].shape
         current_char = torch.tensor([self.target_vocab.char2id["{"]]*batch,device = device)
         initial_states = initialStates
-        for x in range(0,max_length + 1):
+        for x in range(0,max_length ):
             current_char_emb = self.decoderCharEmb(current_char)
             current_char_emb= current_char_emb.unsqueeze(dim=0)
             yt,new_initial_states=self.charDecoder(current_char_emb,initial_states)
@@ -117,7 +117,7 @@ class CharDecoder(nn.Module):
         for i in range(0,batch):
             word = ""
             x = 0
-            while x <= max_length + 1:
+            while x <= max_length :
                 if output_words[x][i] != self.target_vocab.end_of_word:
                     word = word + self.target_vocab.id2char[output_words[x][i]]
                 x += 1
